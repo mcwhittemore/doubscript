@@ -1,0 +1,6 @@
+main(args) {
+  input = args[0];
+  log(input);
+  doubled = input*2;
+  log(doubled);
+}  
