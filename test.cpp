@@ -3,7 +3,7 @@
 
 int main(int argc, char **argv)
 {
-  mlg::Mathlog m = new mlg::Mathlog(argc[0]);
+  mlg::Mathlog m = mlg::Mathlog(argv[0]);
   std::vector<double> args = {7};
   m.run("main", args);
 }
