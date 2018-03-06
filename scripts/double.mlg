@@ -1,6 +1,5 @@
-main(args) {
-  input = args[0];
-  log(input);
-  doubled = input*2;
-  log(doubled);
-}  
+main:args // define a function that accepts an array of doubles
+  input=args[0] // assign the value of args[0] to input
+  log(input) // write "input: _val_of_input_" to stdout
+  doubled=input*2 // multiply input by two and assign result to doubled
+  log(doubled) // write "doubled: _val_of_doubled_" to stdout

@@ -1,11 +1,9 @@
-main(args) {
-  n = args[0];
-  out = rr(n);
-  log(out);
-}
+main:args
+  n = args[0]
+  out = rr(n)
+  log(out)
 
-rr(n) {
-  if (n <= 1) return 1;
-  sr = rr(n/2);
-  return (2 * sr) + n;
-}
+rr: n
+  if (n <= 1) return(1)
+  sr = rr(n/2)
+  return((2 * sr) + n)
