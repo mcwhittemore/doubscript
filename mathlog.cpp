@@ -85,12 +85,12 @@ class Mathlog {
 
     void run(std::string f, std::vector<double> args) {
       mlg::Function func = functions[f];
-      func.run(args);
+      func.run(args, functions);
     }
 
     void run(std::string f, double arg) {
       mlg::Function func = functions[f];
-      func.run(arg);
+      func.run(arg, functions);
     }
 };
 }
