@@ -50,8 +50,9 @@ class Mathlog {
       int len = line.length();
       for (int i=0; i<len; i++) {
         if (line[i] == '/' && line[i+1] == '/') break;
-        if (line[i] != ' ' || line[i] != '\t') out.push_back(line[i]);
+        if (line[i] != ' ' && line[i] != '\t') out.push_back(line[i]);
       }
+      std::cout << "input: '" << line << "' output: '" << out << "'\n";
       return out;
     }
 

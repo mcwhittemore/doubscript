@@ -11,13 +11,23 @@ class Command {
   public:
     Command() {}
     Command(std::string c) {
-      int ei = find(c, '=', 0);
-      if (ei > -1) {
+      size_t s = c.find("=");
+      if (s < c.size()) {
+        std::cout << "found assign: " << s << "\n";
         std::vector<std::string> args;
         args.push_back("assign");
-        args.push_back(before(c, ei));
-        args.push_back(after(c, ei));
+        args.push_back(before(c, s));
+        args.push_back(after(c, s));
         actions.push_back(args);
+      }
+
+      s = c.find("log(");
+      if (s < c.size()) {
+        std::cout << "found log: " << s << "\n";
+        std::vector<std::string> logArgs;
+        logArgs.push_back("log");
+        logArgs.push_back(c.substr(s+4, c.find(")",s)-1));
+        actions.push_back(logArgs);
       }
 
 
@@ -36,7 +46,7 @@ class Command {
 
   private:
     void assign(std::vector<std::string> args, mlg::Scope scope) {
-      std::cout << "\t\t"<<args[1]<<" - " << args[2]<<"\n";
+      std::cout << "\t\t"<<args[1]<<" = " << args[2]<<"\n";
       double v = scope.get(args[1]);
       scope.set(args[2], v);
     }
@@ -46,29 +56,22 @@ class Command {
       std::cout << args[1] << ": " << v << "\n";
     }
 
-    int find(std::string text, char c, int start) {
-      for (int i=start; i<text.length(); i++) {
-        if (text[i] == c) return i; 
-      }
-      return -1;
-    }
-
-    std::string before(std::string text, int b) {
-      int start = 0;
-      int next = find(text, ' ', start);
-      while(next < b) {
+    std::string before(std::string text, size_t end) {
+      size_t start = 0;
+      size_t next = text.find(" ", 0);
+      while (true) {
+        std::cout << "before: " << start << " " << end << " '" << text.substr(start, end) << "'\n";
+        next = text.find(" ", start+1);
+        if (next >= end) break;
         start = next;
-        next = find(text, ' ', start+1);
       }
 
-      return substr(text, start, b);
+      return text.substr(start, end);
     }
 
-    std::string after(std::string text, int e) {
-      int we = find(text, ' ', e);
-      std::cout << "after: " << e << " to " << we << "\n";
-      if (we == -1) we = text.length();
-      return substr(text, e, we);
+    std::string after(std::string text, int start) {
+      size_t end = text.find(" ", start);
+      return text.substr(start+1, end);
     }
 
     std::string substr(std::string text, int start, int end) {
