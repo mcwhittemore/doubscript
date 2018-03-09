@@ -38,7 +38,6 @@ class Mathlog {
       if (hold.length() > 0) headerParts.push_back(hold);
 
       std::string name = headerParts[0];
-      std::cout << "func: " << name << "\n";
 
       if (name.length() == 0) throw "functions must start with a name";
 
@@ -84,13 +83,10 @@ class Mathlog {
     }
 
     void run(std::string f, std::vector<double> args) {
+      std::cout << "Running program from entry point: " << f << "\n";
       mlg::Function func = functions[f];
       func.run(args, functions);
     }
 
-    void run(std::string f, double arg) {
-      mlg::Function func = functions[f];
-      func.run(arg, functions);
-    }
 };
 }
