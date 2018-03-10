@@ -16,7 +16,7 @@ This constructor takes `content` representing a `doubscript` program and process
 
 - content {std::string} - a `doublescript` program
 
-#### doub::Doubscript::run
+### doub::Doubscript::run
 
 Runs the provided function from the loaded program, passing along the provided args.
 
@@ -24,7 +24,7 @@ Runs the provided function from the loaded program, passing along the provided a
 - args {std::vector<double>} - the vales of the functions arguments
 - returns {void}
 
-#### doub::Doubscript::getProgram
+### doub::Doubscript::getProgram
 
 Returns the `std::string` content passed to the constructor.
 
