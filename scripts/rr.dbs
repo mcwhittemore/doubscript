@@ -1,5 +1,4 @@
-main:args
-  n = args[0]
+main:n
   out = rr(n)
   log(out)
 

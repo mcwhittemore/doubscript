@@ -1,5 +1,4 @@
-main: args
-  end = args[0]
+main: end
   i = 0
   last = 1
   cur = 1

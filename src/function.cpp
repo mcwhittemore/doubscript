@@ -20,9 +20,10 @@ class Function {
       }
     }
     double run(std::vector<double> input, std::map<std::string, dbs::Function> funcs) {
+      if (input.size() < args.size()) throw "not enough args";
+      if (input.size() > args.size()) throw "too many args";
       for(int i=0; i<input.size(); i++) {
-        std::string arg = args[0] + "[" + std::to_string(i) + "]";
-        dbls[arg] = input[i];
+        dbls[args[i]] = input[i];
       }
 
       dbs::Scope scope = dbs::Scope(dbls, funcs);

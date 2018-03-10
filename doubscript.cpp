@@ -4,7 +4,7 @@
 #include "src/function.cpp"
 
 namespace dbs {
-class Dubscript {
+class Doubscript {
   std::map<std::string, dbs::Function> functions;
   std::string program;
 
@@ -56,7 +56,7 @@ class Dubscript {
     }
 
   public:
-    static dbs::Dubscript fromFile(std::string file) {
+    static dbs::Doubscript fromFile(std::string file) {
       FILE * pFile;
       char c;
       pFile = std::fopen(file.c_str(), "r");
@@ -67,11 +67,11 @@ class Dubscript {
         content.push_back(c);
       }
       fclose(pFile);
-      dbs::Dubscript m = dbs::Dubscript(content);
+      dbs::Doubscript m = dbs::Doubscript(content);
       return m;
     }
   
-    Dubscript(std::string content) { 
+    Doubscript(std::string content) { 
       program = content;
       // read file into blob of text
       int len = content.length();
