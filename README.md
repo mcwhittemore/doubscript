@@ -2,6 +2,8 @@
 
 C++ class for running `doub` scripts.
 
+For a program to run doubscripts from the CLI, see [doub](https://github.com/mcwhittemore/doub).
+
 ## Usage
 
 ### doub::Doubscript
