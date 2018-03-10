@@ -5,7 +5,7 @@
 #include "function.cpp"
 #include "scope.cpp"
 
-namespace mlg {
+namespace dbs {
 class Function;
 class Command {
   std::vector<std::vector<std::string> > actions;
@@ -26,7 +26,7 @@ class Command {
         std::cout << "\n";
       }
     }
-    bool run(mlg::Scope *scope) {
+    bool run(dbs::Scope *scope) {
       bool exit = false;
       for (int i=0; i<actions.size(); i++) {
         std::vector<std::string> args = actions[i];
@@ -102,7 +102,7 @@ class Command {
       return c;
     }
 
-    void math(std::vector<std::string> args, mlg::Scope *scope) {
+    void math(std::vector<std::string> args, dbs::Scope *scope) {
       std::string act = args[0];
       double left = scope->get(args[1]);
       double right = scope->get(args[2]);
@@ -115,12 +115,12 @@ class Command {
       else if (act == "^") scope->set(var, pow(left, right));
     }
 
-    void assign(std::vector<std::string> args, mlg::Scope *scope) {
+    void assign(std::vector<std::string> args, dbs::Scope *scope) {
       double v = scope->get(args[2]);
       scope->set(args[1], v);
     }
 
-    void print(std::vector<std::string> args, mlg::Scope *scope) { 
+    void print(std::vector<std::string> args, dbs::Scope *scope) { 
       double v = scope->get(args[1]);
       std::cout << args[1] << ": " << v << "\n";
     }

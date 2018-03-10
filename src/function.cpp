@@ -4,28 +4,28 @@
 #include "command.cpp"
 #include "scope.cpp"
 
-namespace mlg {
+namespace dbs {
 class Command;
 class Function {
   std::map<std::string, double> dbls;
-  std::vector<mlg::Command> cmds;
+  std::vector<dbs::Command> cmds;
   std::vector<std::string> args;
   public:
     Function(){}
     Function(std::vector<std::string> ag, std::vector<std::string> logic) {
       args = ag;
       for(int i=0; i<logic.size(); i++) {
-        mlg::Command cmd = mlg::Command(logic[i]);
+        dbs::Command cmd = dbs::Command(logic[i]);
         cmds.push_back(cmd);
       }
     }
-    double run(std::vector<double> input, std::map<std::string, mlg::Function> funcs) {
+    double run(std::vector<double> input, std::map<std::string, dbs::Function> funcs) {
       for(int i=0; i<input.size(); i++) {
         std::string arg = args[0] + "[" + std::to_string(i) + "]";
         dbls[arg] = input[i];
       }
 
-      mlg::Scope scope = mlg::Scope(dbls, funcs);
+      dbs::Scope scope = dbs::Scope(dbls, funcs);
 
       for(int i=0; i<cmds.size(); i++) {
         bool exit = cmds[i].run(&scope);

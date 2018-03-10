@@ -3,9 +3,9 @@
 #include <vector>
 #include "src/function.cpp"
 
-namespace mlg {
-class Mathlog {
-  std::map<std::string, mlg::Function> functions;
+namespace dbs {
+class Dubscript {
+  std::map<std::string, dbs::Function> functions;
 
   private:
 
@@ -40,7 +40,7 @@ class Mathlog {
       if (name.length() == 0) throw "functions must start with a name";
 
       headerParts.erase(headerParts.begin());
-      functions[name] = mlg::Function(headerParts, logic);
+      functions[name] = dbs::Function(headerParts, logic);
     }
 
     std::string stripComments(std::string line) {
@@ -55,7 +55,7 @@ class Mathlog {
     }
 
   public:
-    static mlg::Mathlog fromFile(std::string file) {
+    static dbs::Dubscript fromFile(std::string file) {
       FILE * pFile;
       char c;
       pFile = std::fopen(file.c_str(), "r");
@@ -65,11 +65,11 @@ class Mathlog {
         content.push_back(c);
       } while(c != EOF);
       fclose(pFile);
-      mlg::Mathlog m = mlg::Mathlog(content);
+      dbs::Dubscript m = dbs::Dubscript(content);
       return m;
     }
   
-    Mathlog(std::string content) { 
+    Dubscript(std::string content) { 
       // read file into blob of text
       int len = content.length();
       std::vector<std::string> lines;
@@ -95,7 +95,7 @@ class Mathlog {
     }
 
     void run(std::string f, std::vector<double> args) {
-      mlg::Function func = functions[f];
+      dbs::Function func = functions[f];
       func.run(args, functions);
     }
 
