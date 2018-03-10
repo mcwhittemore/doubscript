@@ -6,6 +6,7 @@
 namespace dbs {
 class Dubscript {
   std::map<std::string, dbs::Function> functions;
+  std::string program;
 
   private:
 
@@ -60,16 +61,18 @@ class Dubscript {
       char c;
       pFile = std::fopen(file.c_str(), "r");
       std::string content = "";
-      do  {
+      while(true) {
         c = fgetc(pFile);
+        if (c == EOF) break;
         content.push_back(c);
-      } while(c != EOF);
+      }
       fclose(pFile);
       dbs::Dubscript m = dbs::Dubscript(content);
       return m;
     }
   
     Dubscript(std::string content) { 
+      program = content;
       // read file into blob of text
       int len = content.length();
       std::vector<std::string> lines;
@@ -92,6 +95,10 @@ class Dubscript {
       }
       if (line.length() > 0) lines.push_back(line);
       if (lines.size() > 0) addFunction(lines);
+    }
+
+    std::string getProgram() {
+      return program;
     }
 
     void run(std::string f, std::vector<double> args) {

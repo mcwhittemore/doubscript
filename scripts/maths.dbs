@@ -1,0 +1,24 @@
+main:args // define a function that accepts an array of doubles
+  print(args[0])
+
+  addOne = args[0] + 1
+  print(addOne)
+
+  minOne = args[0] - 1
+  print(minOne)
+
+  multThree = args[0] * 3
+  print(multThree)
+
+  divThree = args[0] / 3
+  print(divThree)
+
+  toTwo = args[0] ^ 2
+  print(toTwo)
+
+  allGrow = args[0] + 1 * 2 ^ 2 // add 4
+  print(allGrow)
+
+  allShrink = args[0] - 2 / 2 // min 1
+  print(allShrink)
+

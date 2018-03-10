@@ -18,6 +18,7 @@ class Command {
         // throw "Unexpected content";
       }
       for (int i=0; i<actions.size(); i++) {
+        break;
         std::vector<std::string> args = actions[i];
         std::cout << args[0] << " ("<<args.size()-1<<"): ";
         for (int j=1; j<args.size(); j++) {
@@ -27,12 +28,13 @@ class Command {
       }
     }
     bool run(dbs::Scope *scope) {
+      std::string symbols = "^*/-+";
       bool exit = false;
       for (int i=0; i<actions.size(); i++) {
         std::vector<std::string> args = actions[i];
         if (args[0] == "assign") assign(args, scope);
         else if (args[0] == "print") print(args, scope);
-        else if (args[0] == "*") math(args, scope);
+        else if (symbols.find(args[0]) < symbols.size()) math(args, scope);
       }
       return exit;
     }
@@ -54,18 +56,18 @@ class Command {
       // TODO: resolve return()
       // TODO: resolve functions
       // TODO: resolve ( and [
-      // TODO: resolve ^
+ 
+      // ACTION: ^
+      std::vector<std::string> exp = {"^"};
+      c = resolveSymbol(c, exp);
 
       // ACTION: * and /
-      size_t div = c.find("/");
-      size_t mult = c.find("*");
-      while(div < c.size() || mult < c.size()) { // there are * and / in the command
-        c = divideAndMultiply(c, div, mult);
-        div = c.find("/");
-        mult = c.find("*");
-      }
+      std::vector<std::string> divAndMult = {"/", "*"};
+      c = resolveSymbol(c, divAndMult);
 
-      // TODO: resolve + and -
+      // ACTION: + and -
+      std::vector<std::string> addAndSub = {"+", "-"};
+      c = resolveSymbol(c, addAndSub);
 
       // ACTION: =
       s = c.find("=");
@@ -81,11 +83,21 @@ class Command {
       return c.length();
     }
 
-    std::string divideAndMultiply(std::string c, size_t div, size_t mult) {
+    std::string resolveSymbol(std::string c, std::vector<std::string> symbols) {
+      size_t pos = findSymbol(c, 0, symbols);
+      while(pos < c.size()) {
+        c = mathAction(c, pos);
+        pos = findSymbol(c, 0, symbols);
+      }
+      return c;
+    }
+
+    std::string mathAction(std::string c, size_t loc) {
       std::string var = "@" + std::to_string(actions.size());
 
-      std::string act = div < mult ? "/" : "*";
-      size_t loc = div < mult ? div : mult;
+      std::string act = "";
+      act.push_back(c[loc]);
+
       std::string left = before(c, loc);
       std::string right = after(c, loc);
       std::vector<std::string> args;
@@ -126,8 +138,12 @@ class Command {
     }
 
     size_t findSymbol(std::string text, size_t start) {
-      std::string symbols[] = {"=", "*", "/"};
-      int numSymbols = 3;
+      std::vector<std::string> symbols = {"=", "*", "/", "^", "+", "-"};
+      return findSymbol(text, start, symbols);
+    }
+
+    size_t findSymbol(std::string text, size_t start, std::vector<std::string> symbols) {
+      int numSymbols = symbols.size();
       size_t best = text.find(symbols[0], start);
       for (int i=1; i<numSymbols; i++) {
         size_t n = text.find(symbols[i], start);
