@@ -13,7 +13,6 @@ class Function {
   public:
     Function(){}
     Function(std::vector<std::string> ag, std::vector<std::string> logic) {
-      std::cout << "setting up a function\n";
       args = ag;
       for(int i=0; i<logic.size(); i++) {
         mlg::Command cmd = mlg::Command(logic[i]);
@@ -29,8 +28,7 @@ class Function {
       mlg::Scope scope = mlg::Scope(dbls, funcs);
 
       for(int i=0; i<cmds.size(); i++) {
-        std::cout << "\nLoading Command: " << i << "\n";
-        bool exit = cmds[i].run(scope);
+        bool exit = cmds[i].run(&scope);
         if (exit) break;
       }
       return scope.getReturn();

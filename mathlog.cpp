@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <map>
 #include <vector>
 #include "src/function.cpp"
@@ -5,11 +6,8 @@
 namespace mlg {
 class Mathlog {
   std::map<std::string, mlg::Function> functions;
-  
+
   private:
-    std::string readFile(std::string filename) { 
-      return "main: args // comment \n  input = args[0]\n  log(input)";
-    }
 
     void addFunction(std::vector<std::string> lines) {
       // get func logic
@@ -52,14 +50,26 @@ class Mathlog {
         if (line[i] == '/' && line[i+1] == '/') break;
         if (line[i] != ' ' && line[i] != '\t') out.push_back(line[i]);
       }
-      std::cout << "input: '" << line << "' output: '" << out << "'\n";
       return out;
     }
 
   public:
-    Mathlog(std::string filename) { 
+    static mlg::Mathlog fromFile(std::string file) {
+      FILE * pFile;
+      char c;
+      pFile = std::fopen(file.c_str(), "r");
+      std::string content = "";
+      do  {
+        c = fgetc(pFile);
+        content.push_back(c);
+      } while(c != EOF);
+      fclose(pFile);
+      mlg::Mathlog m = mlg::Mathlog(content);
+      return m;
+    }
+  
+    Mathlog(std::string content) { 
       // read file into blob of text
-      std::string content = readFile(filename);
       int len = content.length();
       std::vector<std::string> lines;
       std::string line = "";
@@ -84,7 +94,6 @@ class Mathlog {
     }
 
     void run(std::string f, std::vector<double> args) {
-      std::cout << "Running program from entry point: " << f << "\n";
       mlg::Function func = functions[f];
       func.run(args, functions);
     }
