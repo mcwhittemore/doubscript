@@ -1,18 +1,18 @@
 # Doubscript
 
-A cli tool and C++ class for running `dbs` scripts;
+A cli tool and C++ class for running `doub` scripts;
 
-`dbs ./script/double.dbs 7`
+`doub ./script/double.doub 7`
 
-The above runs a user script found at `./script/double.dbs` and passes 7 to the first arguments of `main`.
+The above runs a user script found at `./script/double.doub` and passes 7 to the first arguments of `main`.
 
-Here is [an example](https://github.com/mcwhittemore/dubscript/blob/master/scripts/double.dbs) of what that script might look like.
+Here is [an example](https://github.com/mcwhittemore/doubscript/blob/master/scripts/double.doub) of what that script might look like.
 
 ```
 main:input // define a function that accepts one input
   print(input) // write "input: _val_of_input_" to stdout
-  doubled=input*2 // multiply input by two and assign result to doubled
-  print(doubled) // write "doubled: _val_of_doubled_" to stdout
+  doubd=input*2 // multiply input by two and assign result to doubled
+  print(doubd) // write "doubd: _val_of_doubd_" to stdout
 ```
 
 ## Langauge features

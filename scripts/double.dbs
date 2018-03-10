@@ -1,4 +1,0 @@
-main:input // define a function that accepts one input
-  print(input) // write "input: _val_of_input_" to stdout
-  doubled=input*2 // multiply input by two and assign result to doubled
-  print(doubled) // write "doubled: _val_of_doubled_" to stdout
