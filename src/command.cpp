@@ -20,13 +20,13 @@ class Command {
         actions.push_back(args);
       }
 
-      s = c.find("log(");
+      s = c.find("print(");
       if (s < c.size()) {
-        std::vector<std::string> logArgs;
-        logArgs.push_back("log");
-        size_t e = c.find(")", s) - (s+4);
-        logArgs.push_back(c.substr(s+4, e));
-        actions.push_back(logArgs);
+        std::vector<std::string> printArgs;
+        printArgs.push_back("print");
+        size_t e = c.find(")", s) - (s+6);
+        printArgs.push_back(c.substr(s+6, e));
+        actions.push_back(printArgs);
       }
 
 
@@ -36,7 +36,7 @@ class Command {
       for (int i=0; i<actions.size(); i++) {
         std::vector<std::string> args = actions[i];
         if (args[0] == "assign") assign(args, scope);
-        else if (args[0] == "log") log(args, scope);
+        else if (args[0] == "print") print(args, scope);
       }
       return exit;
     }
@@ -47,7 +47,7 @@ class Command {
       scope->set(args[1], v);
     }
 
-    void log(std::vector<std::string> args, mlg::Scope *scope) { 
+    void print(std::vector<std::string> args, mlg::Scope *scope) { 
       double v = scope->get(args[1]);
       std::cout << args[1] << ": " << v << "\n";
     }

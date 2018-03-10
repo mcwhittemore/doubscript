@@ -4,7 +4,7 @@
 int main(int argc, char **argv)
 {
   std::cout << "First Test: assign and log\n";
-  mlg::Mathlog m = mlg::Mathlog("main: args // comment \n  input = args[0]\n  log(input)");
+  mlg::Mathlog m = mlg::Mathlog("main: args // comment \n  input = args[0]\n  print(input)");
   std::vector<double> args;
   args.push_back(7);
   m.run("main", args);
