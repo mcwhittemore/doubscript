@@ -3,16 +3,16 @@
 #include <vector>
 #include "function.cpp"
 
-namespace dbs {
+namespace doub {
 class Function;
 class Scope {
   std::map<std::string, double> dbls;
-  std::map<std::string, dbs::Function> funcs;
+  std::map<std::string, doub::Function> funcs;
   double returnVal;
 
   public:
     Scope() {};
-    Scope(std::map<std::string, double> d, std::map<std::string, dbs::Function> f) {
+    Scope(std::map<std::string, double> d, std::map<std::string, doub::Function> f) {
       dbls = d;
       funcs = f;
       returnVal = 0;

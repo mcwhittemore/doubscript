@@ -3,60 +3,13 @@
 #include <vector>
 #include "src/function.cpp"
 
-namespace dbs {
+namespace doub {
 class Doubscript {
-  std::map<std::string, dbs::Function> functions;
+  std::map<std::string, doub::Function> functions;
   std::string program;
 
-  private:
-
-    void addFunction(std::vector<std::string> lines) {
-      // get func logic
-      std::vector<std::string> logic;
-      for(int i=1; i<lines.size(); i++) {
-        std::string line = stripComments(lines[i]);
-        if (line.length() > 0) logic.push_back(line);
-      }
-
-      if (logic.size() == 0) return;
-
-      // get func name and args
-      std::string header = stripComments(lines[0]);
-      int len = header.length();
-      std::vector<std::string> headerParts;
-      std::string hold = "";
-      for(int i=0; i<len; i++) {
-        if (header[i] == ',' || header[i] == ':') {
-          headerParts.push_back(hold);
-          hold = "";
-        }
-        else {
-          hold.push_back(header[i]);
-        }
-      }
-      if (hold.length() > 0) headerParts.push_back(hold);
-
-      std::string name = headerParts[0];
-
-      if (name.length() == 0) throw "functions must start with a name";
-
-      headerParts.erase(headerParts.begin());
-      functions[name] = dbs::Function(headerParts, logic);
-    }
-
-    std::string stripComments(std::string line) {
-      // TODO: throw error when an @ is found
-      std::string out = "";
-      int len = line.length();
-      for (int i=0; i<len; i++) {
-        if (line[i] == '/' && line[i+1] == '/') break;
-        if (line[i] != ' ' && line[i] != '\t') out.push_back(line[i]);
-      }
-      return out;
-    }
-
   public:
-    static dbs::Doubscript fromFile(std::string file) {
+    static doub::Doubscript fromFile(std::string file) {
       FILE * pFile;
       char c;
       pFile = std::fopen(file.c_str(), "r");
@@ -67,7 +20,7 @@ class Doubscript {
         content.push_back(c);
       }
       fclose(pFile);
-      dbs::Doubscript m = dbs::Doubscript(content);
+      doub::Doubscript m = doub::Doubscript(content);
       return m;
     }
   
@@ -102,9 +55,57 @@ class Doubscript {
     }
 
     void run(std::string f, std::vector<double> args) {
-      dbs::Function func = functions[f];
+      doub::Function func = functions[f];
       func.run(args, functions);
     }
+
+  private:
+
+    void addFunction(std::vector<std::string> lines) {
+      // get func logic
+      std::vector<std::string> logic;
+      for(int i=1; i<lines.size(); i++) {
+        std::string line = stripComments(lines[i]);
+        if (line.length() > 0) logic.push_back(line);
+      }
+
+      if (logic.size() == 0) return;
+
+      // get func name and args
+      std::string header = stripComments(lines[0]);
+      int len = header.length();
+      std::vector<std::string> headerParts;
+      std::string hold = "";
+      for(int i=0; i<len; i++) {
+        if (header[i] == ',' || header[i] == ':') {
+          headerParts.push_back(hold);
+          hold = "";
+        }
+        else {
+          hold.push_back(header[i]);
+        }
+      }
+      if (hold.length() > 0) headerParts.push_back(hold);
+
+      std::string name = headerParts[0];
+
+      if (name.length() == 0) throw "functions must start with a name";
+
+      headerParts.erase(headerParts.begin());
+      functions[name] = doub::Function(headerParts, logic);
+    }
+
+    std::string stripComments(std::string line) {
+      // TODO: throw error when an @ is found
+      std::string out = "";
+      int len = line.length();
+      for (int i=0; i<len; i++) {
+        if (line[i] == '/' && line[i+1] == '/') break;
+        if (line[i] != ' ' && line[i] != '\t') out.push_back(line[i]);
+      }
+      return out;
+    }
+
 
 };
 }

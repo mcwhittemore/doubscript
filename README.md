@@ -1,19 +1,41 @@
 # Doubscript
 
-A cli tool and C++ class for running `doub` scripts;
+C++ class for running `doub` scripts.
 
-`doub ./script/double.doub 7`
+## Usage
 
-The above runs a user script found at `./script/double.doub` and passes 7 to the first arguments of `main`.
+### doub::Doubscript
 
-Here is [an example](https://github.com/mcwhittemore/doubscript/blob/master/scripts/double.doub) of what that script might look like.
+This is the entry point class for Doubscript.
 
-```
-main:input // define a function that accepts one input
-  print(input) // write "input: _val_of_input_" to stdout
-  doubd=input*2 // multiply input by two and assign result to doubled
-  print(doubd) // write "doubd: _val_of_doubd_" to stdout
-```
+**About the constructor**
+
+This constructor takes `content` representing a `doubscript` program and processes it. If there are syntax errors in the program, creating this will throw an error.
+
+- content {std::string} - a `doublescript` program
+
+#### doub::Doubscript::run
+
+Runs the provided function from the loaded program, passing along the provided args.
+
+- f {std::string} - the name of the function to run
+- args {std::vector<double>} - the vales of the functions arguments
+- returns {void}
+
+#### doub::Doubscript::getProgram
+
+Returns the `std::string` content passed to the constructor.
+
+- returns {std::string}
+
+### doub::Doubscript::fromFile
+
+_static_
+
+Takes a file path and returns a new Doubscript program.
+
+- file {std::string} - the path to the file from the cwd.
+- returns {doub::Doubscript}
 
 ## Langauge features
 
@@ -22,10 +44,14 @@ main:input // define a function that accepts one input
 - `print(...)` is a function that prints the name and value of the passed double to stdout
 - `+-*/^=` do what you'd expect them to do.
 
-## TODO
+### TODO
 
+- Formalize syntax error messages
 - `(...)` provides order of operations control
 - `func(...)` calls a custom function named `func`.
 - `return(...)` is a function that provides the passed value to the calling function.
 - Provide standard math functions like sin, cos, log...
+- Provide good parsing errors
+- Throw error on undefined vars at compile time
+- We need arrays that can hold doubles and arrays
 
