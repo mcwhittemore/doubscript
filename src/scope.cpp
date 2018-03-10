@@ -19,7 +19,11 @@ class Scope {
     }
 
     double get(std::string name) {
-      return dbls[name];
+      try {
+        return stod(name);
+      } catch(const std::exception& e) {
+        return dbls[name];
+      }
     }
 
     void set(std::string name, double val) {

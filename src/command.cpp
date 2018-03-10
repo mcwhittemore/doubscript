@@ -1,6 +1,7 @@
 #pragma once
 #include <map>
 #include <vector>
+#include <math.h>
 #include "function.cpp"
 #include "scope.cpp"
 
@@ -11,25 +12,19 @@ class Command {
   public:
     Command() {}
     Command(std::string c) {
-      size_t s = c.find("=");
-      if (s < c.size()) {
-        std::vector<std::string> args;
-        args.push_back("assign");
-        args.push_back(before(c, s));
-        args.push_back(after(c, s));
-        actions.push_back(args);
+      int unresolveLength = toActions(c);
+      if (unresolveLength > 0) {
+        // TODO: handle errors better
+        // throw "Unexpected content";
       }
-
-      s = c.find("print(");
-      if (s < c.size()) {
-        std::vector<std::string> printArgs;
-        printArgs.push_back("print");
-        size_t e = c.find(")", s) - (s+6);
-        printArgs.push_back(c.substr(s+6, e));
-        actions.push_back(printArgs);
+      for (int i=0; i<actions.size(); i++) {
+        std::vector<std::string> args = actions[i];
+        std::cout << args[0] << " ("<<args.size()-1<<"): ";
+        for (int j=1; j<args.size(); j++) {
+          std::cout << "[" << args[j] << "] ";
+        }
+        std::cout << "\n";
       }
-
-
     }
     bool run(mlg::Scope *scope) {
       bool exit = false;
@@ -37,11 +32,89 @@ class Command {
         std::vector<std::string> args = actions[i];
         if (args[0] == "assign") assign(args, scope);
         else if (args[0] == "print") print(args, scope);
+        else if (args[0] == "*") math(args, scope);
       }
       return exit;
     }
 
   private:
+    int toActions(std::string c) {
+      // ACTION: resolve print()
+      size_t s = c.find("print(");
+      if (s < c.size()) {
+        std::vector<std::string> printArgs;
+        printArgs.push_back("print");
+        size_t e = c.find(")", s) - (s+6);
+        printArgs.push_back(c.substr(s+6, e));
+        actions.push_back(printArgs);
+        // TODO: Check for bad syntax such as print(input) * 9;
+        return 0;
+      }
+
+      // TODO: resolve return()
+      // TODO: resolve functions
+      // TODO: resolve ( and [
+      // TODO: resolve ^
+
+      // ACTION: * and /
+      size_t div = c.find("/");
+      size_t mult = c.find("*");
+      while(div < c.size() || mult < c.size()) { // there are * and / in the command
+        c = divideAndMultiply(c, div, mult);
+        div = c.find("/");
+        mult = c.find("*");
+      }
+
+      // TODO: resolve + and -
+
+      // ACTION: =
+      s = c.find("=");
+      if (s < c.size()) {
+        std::vector<std::string> args;
+        args.push_back("assign");
+        args.push_back(before(c, s));
+        args.push_back(after(c, s));
+        actions.push_back(args);
+        // TODO: clean up c so c.length doesnt include this phrase
+      }
+
+      return c.length();
+    }
+
+    std::string divideAndMultiply(std::string c, size_t div, size_t mult) {
+      std::string var = "@" + std::to_string(actions.size());
+
+      std::string act = div < mult ? "/" : "*";
+      size_t loc = div < mult ? div : mult;
+      std::string left = before(c, loc);
+      std::string right = after(c, loc);
+      std::vector<std::string> args;
+      args.push_back(act);
+      args.push_back(left);
+      args.push_back(right);
+      args.push_back(var);
+      actions.push_back(args);
+
+      // remove the added phrase and replace with a tmp var
+      std::string phrase = left + act + right;
+      size_t pos = c.find(phrase);
+      c.replace(pos, phrase.length(), var);
+      return c;
+    }
+
+    void math(std::vector<std::string> args, mlg::Scope *scope) {
+      std::string act = args[0];
+      double left = scope->get(args[1]);
+      double right = scope->get(args[2]);
+      std::string var = args[3];
+
+      if (act == "*") scope->set(var, left * right);
+      else if (act == "/") scope->set(var, left / right);
+      else if (act == "+") scope->set(var, left + right);
+      else if (act == "-") scope->set(var, left - right);
+      else if (act == "^") scope->set(var, pow(left, right));
+    }
+
     void assign(std::vector<std::string> args, mlg::Scope *scope) {
       double v = scope->get(args[2]);
       scope->set(args[1], v);
@@ -52,21 +125,34 @@ class Command {
       std::cout << args[1] << ": " << v << "\n";
     }
 
+    size_t findSymbol(std::string text, size_t start) {
+      std::string symbols[] = {"=", "*", "/"};
+      int numSymbols = 3;
+      size_t best = text.find(symbols[0], start);
+      for (int i=1; i<numSymbols; i++) {
+        size_t n = text.find(symbols[i], start);
+        if (n < best) best = n;
+      }
+      if (best == start) return text.length();
+      return best;
+    }
+
     std::string before(std::string text, size_t end) {
-      size_t start = 0;
-      size_t next = text.find(" ", 0);
+      size_t start = -1;
+      size_t next = findSymbol(text, -1);
       while (true) {
-        next = text.find(" ", start+1);
+        next = findSymbol(text,start+1);
         if (next >= end) break;
         start = next;
       }
+      start++;
 
-      return text.substr(start, end);
+      return text.substr(start, end-start);
     }
 
     std::string after(std::string text, int start) {
-      size_t end = text.find(" ", start) - start;
-      return text.substr(start+1, end);
+      size_t end = findSymbol(text, start);
+      return text.substr(start+1, end - start-1);
     }
 
     std::string substr(std::string text, int start, int end) {

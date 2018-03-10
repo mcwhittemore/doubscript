@@ -3,7 +3,7 @@
 
 int main(int argc, char **argv)
 {
-  std::cout << "First Test: assign and log\n";
+  std::cout << "First Test: assign and print\n";
   mlg::Mathlog m = mlg::Mathlog("main: args // comment \n  input = args[0]\n  print(input)");
   std::vector<double> args;
   args.push_back(7);

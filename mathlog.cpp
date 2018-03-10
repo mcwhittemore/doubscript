@@ -44,6 +44,7 @@ class Mathlog {
     }
 
     std::string stripComments(std::string line) {
+      // TODO: throw error when an @ is found
       std::string out = "";
       int len = line.length();
       for (int i=0; i<len; i++) {
