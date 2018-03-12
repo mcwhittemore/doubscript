@@ -2,8 +2,8 @@
 #include <map>
 #include <vector>
 #include <math.h>
-#include "function.cpp"
-#include "scope.cpp"
+#include "function.h"
+#include "scope.h"
 
 namespace doub {
 class Function;
@@ -15,55 +15,48 @@ class Command {
     Command(std::string c) {
       int unresolveLength = toActions(c);
       if (unresolveLength > 0) {
-        // TODO: handle errors better
-        // throw "Unexpected content";
-      }
-      for (int i=0; i<actions.size(); i++) {
-        break;
-        std::vector<std::string> args = actions[i];
-        std::cout << args[0] << " ("<<args.size()-1<<"): ";
-        for (int j=1; j<args.size(); j++) {
-          std::cout << "[" << args[j] << "] ";
-        }
-        std::cout << "\n";
+        throw "Unexpected content";
       }
     }
-    bool run(doub::Scope *scope) {
-      std::string symbols = "^*/-+";
-      bool exit = false;
-      for (int i=0; i<actions.size(); i++) {
-        std::vector<std::string> args = actions[i];
-        if (args[0] == "assign") assign(args, scope);
-        else if (args[0] == "print") print(args, scope);
-        else if (symbols.find(args[0]) < symbols.size()) math(args, scope);
-        else if (args[0] == "return") {
-          exit = true;
-          scope->setReturn(scope->get(args[1]));
-          break;
-        }
-      }
-      return exit;
+    int numActions() {
+      return actions.size();
+    }
+
+    std::vector<std::string> getAction(int i) {
+      return actions[i];
+    }
+
+    void math(std::vector<std::string> args, doub::Scope *scope) {
+      std::string act = args[0];
+      double left = scope->get(args[1]);
+      double right = scope->get(args[2]);
+      std::string var = args[3];
+
+      if (act == "*") scope->set(var, left * right);
+      else if (act == "/") scope->set(var, left / right);
+      else if (act == "+") scope->set(var, left + right);
+      else if (act == "-") scope->set(var, left - right);
+      else if (act == "^") scope->set(var, pow(left, right));
+    }
+
+    void assign(std::vector<std::string> args, doub::Scope *scope) {
+      double v = scope->get(args[2]);
+      scope->set(args[1], v);
+    }
+
+    void print(std::vector<std::string> args, doub::Scope *scope) { 
+      double v = scope->get(args[1]);
+      std::cout << args[1] << ": " << v << "\n";
     }
 
   private:
     int toActions(std::string c) {
-      // ACTION: resolve print()
-      size_t s = c.find("print(");
-      if (s < c.size()) {
-        std::vector<std::string> printArgs;
-        printArgs.push_back("print");
-        size_t e = c.find(")", s) - (s+6);
-        printArgs.push_back(c.substr(s+6, e));
-        actions.push_back(printArgs);
-        // TODO: Check for bad syntax such as print(input) * 9;
-        // TODO: Or print(input * 9)
-        return 0;
-      }
 
-      // TODO: resolve function(v,v,v)
+      // ACTION: print()
+      c = resolvePrint(c);
 
-      // ACTION: (...) and return(...)
-      c = resolveParens(c);
+      // ACTION: (...), return(...) and function(...)
+      c = resolveParendsAndFunctions(c);
  
       // ACTION: ^
       std::vector<std::string> exp = {"^"};
@@ -83,31 +76,73 @@ class Command {
       return c.length();
     }
 
-    std::string resolveParens(std::string c) {
+    std::string resolvePrint(std::string c) {
+      size_t s = c.find("print(");
+      if (s < c.size()) {
+        std::vector<std::string> printArgs;
+        printArgs.push_back("print");
+        size_t e = c.find(")", s) - (s+6);
+        printArgs.push_back(c.substr(s+6, e));
+        actions.push_back(printArgs);
+        // TODO: Check for bad syntax such as print(input) * 9;
+        // TODO: Or print(input * 9)
+        return "";
+      }
+      return c;
+    }
+
+    std::string resolveParendsAndFunctions(std::string c) {
       std::vector<std::string> paren = {"("};
       size_t pos = findSymbol(c, 0, paren);
       while(pos < c.size()) {
-        std::string var = newVar();
         std::string name = before(c, pos);
         std::string cmd = internal(c, pos);
-        std::string tempLine = var + "=" + cmd;
-        int finished = toActions(tempLine);
-        if (finished > 0) throw "Unexpected end of command";
 
-        if (name == "return") {
-          std::vector<std::string> args;
-          args.push_back("return");
+        std::vector<std::string> cmds = toParts(cmd);
+        std::vector<std::string> args;
+        args.push_back(name);
+
+        for (int i=0; i<cmds.size(); i++) {
+          std::string var = newVar();
           args.push_back(var);
+          std::string tempLine = var + "=" + cmds[i];
+          int finished = toActions(tempLine);
+          if (finished > 0) throw "Unexpected end of command";
+        }
+
+        std::string var = "";
+        if (name == "") {
+          var = args[1];
+        }
+
+        if (name != "") {
           actions.push_back(args);
         }
 
-        std::string content = "(" + cmd + ")";
+        std::string content = name+"(" + cmd + ")";
         pos = c.find(content);
+        if (pos == c.size()) throw "Unexpected end of command";
         c.replace(pos, content.length(), var);
 
         pos = findSymbol(c, 0, paren);
       }
       return c;
+    }
+
+    std::vector<std::string> toParts(std::string c) {
+      std::vector<std::string> parts;
+      std::string v = "";
+      for(int i=0; i<c.length(); i++) {
+        if (c[i] == ',') {
+          parts.push_back(v);
+          v = "";
+        }
+        else {
+          v.push_back(c[i]);
+        }
+      }
+      parts.push_back(v);
+      return parts;
     }
 
     std::string internal(std::string c, size_t pos) {
@@ -189,28 +224,6 @@ class Command {
       return c;
     }
 
-    void math(std::vector<std::string> args, doub::Scope *scope) {
-      std::string act = args[0];
-      double left = scope->get(args[1]);
-      double right = scope->get(args[2]);
-      std::string var = args[3];
-
-      if (act == "*") scope->set(var, left * right);
-      else if (act == "/") scope->set(var, left / right);
-      else if (act == "+") scope->set(var, left + right);
-      else if (act == "-") scope->set(var, left - right);
-      else if (act == "^") scope->set(var, pow(left, right));
-    }
-
-    void assign(std::vector<std::string> args, doub::Scope *scope) {
-      double v = scope->get(args[2]);
-      scope->set(args[1], v);
-    }
-
-    void print(std::vector<std::string> args, doub::Scope *scope) { 
-      double v = scope->get(args[1]);
-      std::cout << args[1] << ": " << v << "\n";
-    }
 
     size_t findSymbol(std::string text, size_t start) {
       std::vector<std::string> symbols = {"=", "*", "/", "^", "+", "-",  "(", ")"};

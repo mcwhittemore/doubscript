@@ -1,6 +1,6 @@
 main:n
   out = rr(n)
-  log(out)
+  print(out)
 
 rr: n
   if (n <= 1) return(1)

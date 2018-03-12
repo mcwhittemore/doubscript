@@ -1,0 +1,13 @@
+main: a, b
+  one(a)
+  two(a, b)
+  one((a*b))
+  two(a, (a*(b+2)))
+
+one: n
+  print(n)
+
+two: a, b
+  print(a)
+  print(b)
+

@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <map>
 #include <vector>
-#include "src/function.cpp"
+#include "src/function.h"
 
 namespace doub {
 class Doubscript {

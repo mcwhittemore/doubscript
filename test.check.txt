@@ -1,0 +1,105 @@
+First Test: assign and print
+
+***********************
+main: arg // comment 
+  input = arg
+  print(input)
+*****************
+input: 7
+
+Second Test: double input and print
+
+***********************
+main:input // define a function that accepts one input
+  print(input) // write "input: _val_of_input_" to stdout
+  doubd=input*2 // multiply input by two and assign result to doubled
+  print(doubd) // write "doubd: _val_of_doubd_" to stdout
+
+*****************
+input: 7
+doubd: 14
+
+Third Test: All the maths
+
+***********************
+main:input // define a function that accepts an array of doubles
+  print(input)
+
+  addOne = input + 1
+  print(addOne)
+
+  minOne = input - 1
+  print(minOne)
+
+  multThree = input * 3
+  print(multThree)
+
+  divThree = input / 3
+  print(divThree)
+
+  toTwo = input ^ 2
+  print(toTwo)
+
+  allGrow = input + 1 * 2 ^ 2 // add 4
+  print(allGrow)
+
+  allShrink = input - 2 / 2 // min 1
+  print(allShrink)
+
+  ooo = 2 * (input - 5) ^ 2
+  print(ooo)
+
+  manyMin = input - 1 - 1 - 1 // min 3
+  print(manyMin)
+
+
+*****************
+input: 7
+addOne: 8
+minOne: 6
+multThree: 21
+divThree: 2.33333
+toTwo: 49
+allGrow: 11
+allShrink: 6
+ooo: 8
+manyMin: 4
+
+Forth Test: return
+
+***********************
+main: a, b
+  print(a)
+  print(b)
+  return(a+b)
+  print(a) // should not be run
+
+*****************
+a: 7
+b: 3
+result: 10
+
+Fifth Test: running a bunch of functions
+
+***********************
+main: a, b
+  one(a)
+  two(a, b)
+  one((a*b))
+  two(a, (a*(b+2)))
+
+one: n
+  print(n)
+
+two: a, b
+  print(a)
+  print(b)
+
+
+*****************
+n: 5
+a: 5
+b: 8
+n: 40
+a: 5
+b: 50
