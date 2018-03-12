@@ -56,4 +56,5 @@ Takes a file path and returns a new Doubscript program.
 - Provide good parsing errors
 - Throw error on undefined vars at compile time
 - We need arrays that can hold doubles and arrays
+- Program wide vars (aka, globals)
 

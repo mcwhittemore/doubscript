@@ -1,3 +1,0 @@
-main:left,right
-  p = left * right
-  print(p)
