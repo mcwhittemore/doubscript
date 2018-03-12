@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.0
+
+- Adds `()` to the langauge features
+
 ## 0.1.0
 
 The initial version!

@@ -22,3 +22,9 @@ main:input // define a function that accepts an array of doubles
   allShrink = input - 2 / 2 // min 1
   print(allShrink)
 
+  ooo = 2 * (input - 5) ^ 2
+  print(ooo)
+
+  manyMin = input - 1 - 1 - 1 // min 3
+  print(manyMin)
+

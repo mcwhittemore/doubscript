@@ -9,6 +9,7 @@ namespace doub {
 class Function;
 class Command {
   std::vector<std::vector<std::string> > actions;
+  int numVar = -1; // start as a negative number so the first var is 0
   public:
     Command() {}
     Command(std::string c) {
@@ -50,12 +51,15 @@ class Command {
         printArgs.push_back(c.substr(s+6, e));
         actions.push_back(printArgs);
         // TODO: Check for bad syntax such as print(input) * 9;
+        // TODO: Or print(input * 9)
         return 0;
       }
 
       // TODO: resolve return()
-      // TODO: resolve functions
-      // TODO: resolve ( and [
+      // TODO: resolve function(v,v,v)
+
+      // ACTION: (...)
+      c = resolveParens(c);
  
       // ACTION: ^
       std::vector<std::string> exp = {"^"};
@@ -70,17 +74,71 @@ class Command {
       c = resolveSymbol(c, addAndSub);
 
       // ACTION: =
-      s = c.find("=");
-      if (s < c.size()) {
-        std::vector<std::string> args;
-        args.push_back("assign");
-        args.push_back(before(c, s));
-        args.push_back(after(c, s));
-        actions.push_back(args);
-        // TODO: clean up c so c.length doesnt include this phrase
-      }
+      c = resolveAssign(c);
 
       return c.length();
+    }
+
+    std::string resolveParens(std::string c) {
+      std::vector<std::string> paren = {"("};
+      size_t pos = findSymbol(c, 0, paren);
+      while(pos < c.size()) {
+        std::string var = newVar();
+        std::string cmd = internal(c, pos);
+        std::string tempLine = var + "=" + cmd;
+        int finished = toActions(tempLine);
+        if (finished > 0) throw "Unexpected end of command";
+
+        std::string content = "(" + cmd + ")";
+        pos = c.find(content);
+        c.replace(pos, content.length(), var);
+
+        pos = findSymbol(c, 0, paren);
+      }
+      return c;
+    }
+
+    std::string internal(std::string c, size_t pos) {
+      int open = 1;
+      int close = 0;
+      size_t end = pos;
+      size_t full = c.size();
+      while(close < open && end < full) {
+        size_t next = c.find(")", end+1);
+        if (next != full) {
+          close++;
+          end = c.find("(", end+1);
+          while(end < next) {
+            end = c.find("(", end+1);
+            open++;
+          }
+        }
+        end = next;
+      }
+
+      if (close != open) throw "Unexptected end of command";
+      return c.substr(pos+1, end-pos-1);
+    }
+
+    std::string resolveAssign(std::string c) {
+      // TODO: All lines should be hit here (until there are logic statements)
+      size_t s = c.find("=");
+      if (s < c.size()) {
+        std::vector<std::string> args;
+        std::string left = before(c, s);
+        std::string right = after(c, s);
+
+        args.push_back("assign");
+        args.push_back(left);
+        args.push_back(right);
+        actions.push_back(args);
+
+        std::string cmd = left + "=" + right;
+        s = c.find(cmd);
+        c.replace(s, cmd.length(), "");
+      }
+
+      return c;
     }
 
     std::string resolveSymbol(std::string c, std::vector<std::string> symbols) {
@@ -92,8 +150,13 @@ class Command {
       return c;
     }
 
+    std::string newVar() {
+      numVar++;
+      return "@" + std::to_string(numVar);
+    }
+
     std::string mathAction(std::string c, size_t loc) {
-      std::string var = "@" + std::to_string(actions.size());
+      std::string var = newVar();
 
       std::string act = "";
       act.push_back(c[loc]);
@@ -138,14 +201,14 @@ class Command {
     }
 
     size_t findSymbol(std::string text, size_t start) {
-      std::vector<std::string> symbols = {"=", "*", "/", "^", "+", "-"};
+      std::vector<std::string> symbols = {"=", "*", "/", "^", "+", "-",  "(", ")"};
       return findSymbol(text, start, symbols);
     }
 
     size_t findSymbol(std::string text, size_t start, std::vector<std::string> symbols) {
       int numSymbols = symbols.size();
-      size_t best = text.find(symbols[0], start);
-      for (int i=1; i<numSymbols; i++) {
+      size_t best = text.size();
+      for (int i=0; i<numSymbols; i++) {
         size_t n = text.find(symbols[i], start);
         if (n < best) best = n;
       }
@@ -167,7 +230,7 @@ class Command {
     }
 
     std::string after(std::string text, int start) {
-      size_t end = findSymbol(text, start);
+      size_t end = findSymbol(text, start+1);
       return text.substr(start+1, end - start-1);
     }
 
