@@ -3,6 +3,7 @@
 ## 0.2.0
 
 - Adds `()` to the langauge features
+- Adds `return()` to the language features
 
 ## 0.1.0
 

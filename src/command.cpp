@@ -36,6 +36,11 @@ class Command {
         if (args[0] == "assign") assign(args, scope);
         else if (args[0] == "print") print(args, scope);
         else if (symbols.find(args[0]) < symbols.size()) math(args, scope);
+        else if (args[0] == "return") {
+          exit = true;
+          scope->setReturn(scope->get(args[1]));
+          break;
+        }
       }
       return exit;
     }
@@ -55,10 +60,9 @@ class Command {
         return 0;
       }
 
-      // TODO: resolve return()
       // TODO: resolve function(v,v,v)
 
-      // ACTION: (...)
+      // ACTION: (...) and return(...)
       c = resolveParens(c);
  
       // ACTION: ^
@@ -84,10 +88,18 @@ class Command {
       size_t pos = findSymbol(c, 0, paren);
       while(pos < c.size()) {
         std::string var = newVar();
+        std::string name = before(c, pos);
         std::string cmd = internal(c, pos);
         std::string tempLine = var + "=" + cmd;
         int finished = toActions(tempLine);
         if (finished > 0) throw "Unexpected end of command";
+
+        if (name == "return") {
+          std::vector<std::string> args;
+          args.push_back("return");
+          args.push_back(var);
+          actions.push_back(args);
+        }
 
         std::string content = "(" + cmd + ")";
         pos = c.find(content);
@@ -124,10 +136,10 @@ class Command {
       // TODO: All lines should be hit here (until there are logic statements)
       size_t s = c.find("=");
       if (s < c.size()) {
-        std::vector<std::string> args;
         std::string left = before(c, s);
         std::string right = after(c, s);
 
+        std::vector<std::string> args;
         args.push_back("assign");
         args.push_back(left);
         args.push_back(right);

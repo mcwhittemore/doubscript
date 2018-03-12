@@ -10,7 +10,8 @@ Doubscript aims to empower application developers the ability to add
 
 - Indented lines belong to a function and thus unindented lines declare functions.
 - `//` indicates the start of a comment which continues till the end of the line.
-- `print(...)` is a function that prints the name and value of the passed double to stdout
+- `print(var)` is a function that prints the name and value of the passed double to stdout
+- `return(...)` stops the functions exicution and sends the value of its expression to the parent program or function
 - `+-*/^=()` do what you'd expect them to do.
 
 ### TODO

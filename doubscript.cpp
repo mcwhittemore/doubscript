@@ -54,9 +54,9 @@ class Doubscript {
       return program;
     }
 
-    void run(std::string f, std::vector<double> args) {
+    double run(std::string f, std::vector<double> args) {
       doub::Function func = functions[f];
-      func.run(args, functions);
+      return func.run(args, functions);
     }
 
   private:

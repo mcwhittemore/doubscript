@@ -20,5 +20,12 @@ int main(int argc, char **argv)
     doub::Doubscript maths = doub::Doubscript::fromFile("./scripts/maths.doub");
     std::cout << "\n***********************\n" << maths.getProgram() << "\n*****************\n";
     maths.run("main", args);
+
+    std::cout << "\nThird Test: return\n";
+    doub::Doubscript add = doub::Doubscript::fromFile("./scripts/add.doub");
+    std::cout << "\n***********************\n" << add.getProgram() << "\n*****************\n";
+    args.push_back(3);
+    double out = add.run("main", args);
+    std::cout << "result: " << out << "\n";
   } catch(const char* c) { std::cout << c << "\n"; }
 }
