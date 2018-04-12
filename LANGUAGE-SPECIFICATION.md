@@ -2,24 +2,25 @@
 
 Doubscript is a work in progress.
 
-## Goals
-
-Doubscript aims to empower application developers the ability to add 
-
 ## Langauge features
 
 - Indented lines belong to a function and thus unindented lines declare functions.
 - `//` indicates the start of a comment which continues till the end of the line.
-- `print(var)` is a function that prints the name and value of the passed double to stdout
-- `return(...)` stops the functions exicution and sends the value of its expression to the parent program or function
 - `+-*/^=()` do what you'd expect them to do.
+- `print(...)` is a function that prints the name and value of the passed double to stdout
+- `return(...)` returns the value in the parens to the caller
+- `function(x,y,z,...)` calls a custom function named `function` passing the args provided along.
 
 ### TODO
 
+- logicly built doubles
+  - `0 < 1 => 1`
+  - `0 > 1 => 0`
+  - `0 = 1 => 0`
+  - `0 <= 1 => 1`
+  - `0 >= 1 => 0`
+- `if` and `while` for basic processing control
 - Formalize syntax error messages
-- `(...)` provides order of operations control
-- `func(...)` calls a custom function named `func`.
-- `return(...)` is a function that provides the passed value to the calling function.
 - Provide standard math functions like sin, cos, log...
 - Provide good parsing errors
 - Throw error on undefined vars at compile time
