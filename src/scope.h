@@ -1,20 +1,16 @@
 #pragma once
 #include <map>
 #include <vector>
-#include "function.cpp"
 
 namespace doub {
-class Function;
 class Scope {
   std::map<std::string, double> dbls;
-  std::map<std::string, doub::Function> funcs;
   double returnVal;
 
   public:
     Scope() {};
-    Scope(std::map<std::string, double> d, std::map<std::string, doub::Function> f) {
+    Scope(std::map<std::string, double> d) {
       dbls = d;
-      funcs = f;
       returnVal = 0;
     }
 
