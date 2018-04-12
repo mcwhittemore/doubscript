@@ -1,10 +1,26 @@
 # Changelog
 
+## 0.3.0
+
+### Header API
+
+- Add `doub::Doubscript::debug` to run a sprint and log our debug information
+
+### Language Features
+
+- Drops `print(...)` from the langauge
+
 ## 0.2.0
 
-- Adds `()` as a langauge feature
-- Adds `return()` as a language feature
-- Adds `function()` as a language feature
+### Header API
+
+- Changes `doub::Doubscript::run` to return a double
+
+### Language Features
+
+- Adds `()`
+- Adds `return()`
+- Adds `function()`
 
 ## 0.1.0
 
