@@ -5,6 +5,7 @@ main: a, b
   two(a, (a*(b+2)))
 
 one: n
+  f = (5 + 2)
   print(n)
 
 two: a, b

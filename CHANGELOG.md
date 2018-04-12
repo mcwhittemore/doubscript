@@ -2,8 +2,9 @@
 
 ## 0.2.0
 
-- Adds `()` to the langauge features
-- Adds `return()` to the language features
+- Adds `()` as a langauge feature
+- Adds `return()` as a language feature
+- Adds `function()` as a language feature
 
 ## 0.1.0
 

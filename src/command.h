@@ -111,6 +111,8 @@ class Command {
         }
 
         std::string var = "";
+
+        // the value should replace the function unless its return
         if (name == "") {
           var = args[1];
         }
