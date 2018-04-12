@@ -24,6 +24,10 @@ Runs the provided function from the loaded program, passing along the provided a
 - args {std::vector<double>} - the vales of the functions arguments
 - returns {double}
 
+### doub::Doubscript::debug
+
+Same as `doub::Doubscipt::run` except that it prints a detailed debug list of what vars and values are being used through out the running of the program.
+
 ### doub::Doubscript::getProgram
 
 Returns the `std::string` content passed to the constructor.

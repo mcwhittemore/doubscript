@@ -26,34 +26,26 @@ class Command {
       return actions[i];
     }
 
-    void math(std::vector<std::string> args, doub::Scope *scope) {
+    void math(std::vector<std::string> args, doub::Scope *scope, bool debug) {
       std::string act = args[0];
       double left = scope->get(args[1]);
       double right = scope->get(args[2]);
       std::string var = args[3];
 
       if (act == "*") scope->set(var, left * right);
+      if (act == "=") scope->set(var, scope->get(args[2]));
       else if (act == "/") scope->set(var, left / right);
       else if (act == "+") scope->set(var, left + right);
       else if (act == "-") scope->set(var, left - right);
       else if (act == "^") scope->set(var, pow(left, right));
-    }
 
-    void assign(std::vector<std::string> args, doub::Scope *scope) {
-      double v = scope->get(args[2]);
-      scope->set(args[1], v);
-    }
-
-    void print(std::vector<std::string> args, doub::Scope *scope) { 
-      double v = scope->get(args[1]);
-      std::cout << args[1] << ": " << v << "\n";
+      if(debug) {
+        std::cout << var << " = " << args[1] << act << args[2] << " => " << scope->get(var) << std::endl;
+      }
     }
 
   private:
     bool toActions(std::string c) {
-
-      // ACTION: print()
-      c = resolvePrint(c);
 
       // ACTION: (...), return(...) and function(...)
       c = resolveParendsAndFunctions(c);
@@ -79,21 +71,6 @@ class Command {
         if (varIndex <= numVar) return true;
       }
       return c.length() == 0;
-    }
-
-    std::string resolvePrint(std::string c) {
-      size_t s = c.find("print(");
-      if (s < c.size()) {
-        std::vector<std::string> printArgs;
-        printArgs.push_back("print");
-        size_t e = c.find(")", s) - (s+6);
-        printArgs.push_back(c.substr(s+6, e));
-        actions.push_back(printArgs);
-        // TODO: Check for bad syntax such as print(input) * 9;
-        // TODO: Or print(input * 9)
-        return "";
-      }
-      return c;
     }
 
     std::string resolveParendsAndFunctions(std::string c) {
@@ -171,16 +148,16 @@ class Command {
     }
 
     std::string resolveAssign(std::string c) {
-      // TODO: All lines should be hit here (until there are logic statements)
       size_t s = c.find("=");
       if (s < c.size()) {
         std::string left = before(c, s);
         std::string right = after(c, s);
 
         std::vector<std::string> args;
-        args.push_back("assign");
+        args.push_back("=");
         args.push_back(left);
         args.push_back(right);
+        args.push_back(left);
         actions.push_back(args);
 
         std::string cmd = left + "=" + right;
