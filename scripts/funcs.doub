@@ -3,12 +3,18 @@ main: a, b
   two(a, b)
   one((a*b))
   two(a, (a*(b+2)))
+  v=2x(10)
+  print(v)
 
 one: n
-  f = (5 + 2)
   print(n)
 
 two: a, b
   print(a)
   print(b)
+
+2x: n
+ xv=n*2
+ print(xv)
+ return(xv)
 

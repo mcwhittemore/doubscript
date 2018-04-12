@@ -13,8 +13,8 @@ class Command {
   public:
     Command() {}
     Command(std::string c) {
-      int unresolveLength = toActions(c);
-      if (unresolveLength > 0) {
+      bool finished = toActions(c);
+      if (!finished) {
         throw "Unexpected content";
       }
     }
@@ -50,7 +50,7 @@ class Command {
     }
 
   private:
-    int toActions(std::string c) {
+    bool toActions(std::string c) {
 
       // ACTION: print()
       c = resolvePrint(c);
@@ -73,7 +73,12 @@ class Command {
       // ACTION: =
       c = resolveAssign(c);
 
-      return c.length();
+      if (c[0] == '@') {
+        c.replace(0,1,"");
+        int varIndex = stoi(c);
+        if (varIndex <= numVar) return true;
+      }
+      return c.length() == 0;
     }
 
     std::string resolvePrint(std::string c) {
@@ -106,17 +111,13 @@ class Command {
           std::string var = newVar();
           args.push_back(var);
           std::string tempLine = var + "=" + cmds[i];
-          int finished = toActions(tempLine);
-          if (finished > 0) throw "Unexpected end of command";
+          bool finished = toActions(tempLine);
+          if (!finished) throw "Unexpected end of command";
         }
 
-        std::string var = "";
-
-        // the value should replace the function unless its return
-        if (name == "") {
-          var = args[1];
-        }
-
+        // This is because the `toActions` call
+        // in the four loop above will have already
+        // taken care of adding this
         if (name != "") {
           actions.push_back(args);
         }
@@ -124,7 +125,7 @@ class Command {
         std::string content = name+"(" + cmd + ")";
         pos = c.find(content);
         if (pos == c.size()) throw "Unexpected end of command";
-        c.replace(pos, content.length(), var);
+        c.replace(pos, content.length(), args[1]);
 
         pos = findSymbol(c, 0, paren);
       }
