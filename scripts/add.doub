@@ -1,5 +1,3 @@
 main: a, b
-  print(a)
-  print(b)
   return(a+b)
-  print(a) // should not be run
+  v = 9*9 // should not be run

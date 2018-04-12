@@ -4,17 +4,15 @@ main: a, b
   one((a*b))
   two(a, (a*(b+2)))
   v=2x(10)
-  print(v)
 
 one: n
-  print(n)
+  v = n * 1
 
 two: a, b
-  print(a)
-  print(b)
+  av = a * 2
+  bv = b * 2
 
 2x: n
  xv=n*2
- print(xv)
  return(xv)
 
