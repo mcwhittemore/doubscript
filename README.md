@@ -14,25 +14,30 @@ This is the entry point class for Doubscript.
 
 This constructor takes `content` representing a `doubscript` program and processes it. If there are syntax errors in the program, creating this will throw an error.
 
-- content {std::string} - a `doublescript` program
+- content {`std::string`} - a `doublescript` program
 
 ### doub::Doubscript::run
 
 Runs the provided function from the loaded program, passing along the provided args.
 
-- f {std::string} - the name of the function to run
-- args {std::vector<double>} - the vales of the functions arguments
-- returns {double}
+- f {`std::string`} - the name of the function to run
+- args {`std::vector<double>`} - the vales of the functions arguments
+- returns {`double`}
 
 ### doub::Doubscript::debug
 
 Same as `doub::Doubscipt::run` except that it prints a detailed debug list of what vars and values are being used through out the running of the program.
 
+- f {`std::string`} - the name of the function to run
+- args {`std::vector<double>`} - the vales of the functions arguments
+- stream {`std::ostream`} [optional] - a stream to write the debug logs to. Will default to `std::cout`.
+- returns {`double`}
+
 ### doub::Doubscript::getProgram
 
 Returns the `std::string` content passed to the constructor.
 
-- returns {std::string}
+- returns {`std::string`}
 
 ### doub::Doubscript::fromFile
 
@@ -40,6 +45,6 @@ _static_
 
 Takes a file path and returns a new Doubscript program.
 
-- file {std::string} - the path to the file from the cwd.
-- returns {doub::Doubscript}
+- file {`std::string`} - the path to the file from the cwd.
+- returns {`doub::Doubscript`}
 

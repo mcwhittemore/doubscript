@@ -1,8 +1,9 @@
 main: a, b
   c=one(a)
   d=two(a, c)
-  e=one(e+d)
-  return(two(a, (b*(c+d+e))))
+  e=one(c+d)
+  f=two(a, (b*(c+d+e)))
+  return(f)
 
 one: n
   return(n * 1)

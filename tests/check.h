@@ -51,6 +51,10 @@ int check(std::string script, std::string result, std::vector<double> args) {
     std::cout << "FAIL (" << c << ")" << std::endl;
     return 1;
   }
+  catch (std::out_of_range e) {
+    std::cout << "FAIL (out_of_range " << e.what() << ")" << std::endl;
+    return 1;
+  }
 };
   
 }
