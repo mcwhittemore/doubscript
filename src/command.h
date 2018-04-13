@@ -26,7 +26,7 @@ class Command {
       return actions[i];
     }
 
-    void math(std::vector<std::string> args, doub::Scope *scope, bool debug) {
+    void math(std::vector<std::string> args, doub::Scope *scope, std::ostream &debug) {
       std::string act = args[0];
       double left = scope->get(args[1]);
       double right = scope->get(args[2]);
@@ -39,9 +39,7 @@ class Command {
       else if (act == "-") scope->set(var, left - right);
       else if (act == "^") scope->set(var, pow(left, right));
 
-      if(debug) {
-        std::cout << var << " = " << args[1] << act << args[2] << " => " << scope->get(var) << std::endl;
-      }
+      debug << var << " = " << args[1] << act << args[2] << " => " << scope->get(var) << std::endl;
     }
 
   private:

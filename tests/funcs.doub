@@ -1,0 +1,14 @@
+main: a, b
+  c=one(a)
+  d=two(a, c)
+  e=one(e+d)
+  return(two(a, (b*(c+d+e))))
+
+one: n
+  return(n * 1)
+
+two: a, b
+  return(a * b)
+  noop=1 // this should not be run
+
+

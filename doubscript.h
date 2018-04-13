@@ -55,13 +55,17 @@ class Doubscript {
     }
 
     double run(std::string f, std::vector<double> args) {
-      doub::Function func = functions[f];
-      return func.run(args, functions, false);
+      std::ostream ds(nullptr);
+      return debug(f, args, ds);
     }
 
     double debug(std::string f, std::vector<double> args) {
+      return debug(f, args, std::cout);
+    }
+
+    double debug(std::string f, std::vector<double> args, std::ostream &ds) {
       doub::Function func = functions[f];
-      return func.run(args, functions, true);
+      return func.run(args, functions, ds);
     }
 
   private:

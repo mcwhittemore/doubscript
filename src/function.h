@@ -18,7 +18,7 @@ class Function {
         cmds.push_back(cmd);
       }
     }
-    double run(std::vector<double> input, std::map<std::string, doub::Function> funcs, bool debug) {
+    double run(std::vector<double> input, std::map<std::string, doub::Function> funcs, std::ostream &debug) {
       if (input.size() < args.size()) throw "not enough args";
       if (input.size() > args.size()) throw "too many args";
       for(int i=0; i<input.size(); i++) {
@@ -35,7 +35,7 @@ class Function {
     }
 
   private:
-    bool runCommand(doub::Command cmd, doub::Scope *scope, std::map<std::string, doub::Function> funcs, bool debug) {
+    bool runCommand(doub::Command cmd, doub::Scope *scope, std::map<std::string, doub::Function> funcs, std::ostream &debug) {
       std::string symbols = "^*/-+=";
       int numActions = cmd.numActions();
       bool exit = false;
@@ -44,9 +44,10 @@ class Function {
         if (args[0] == "return") {
           exit = true;
           scope->setReturn(scope->get(args[1]));
-          if (debug) {
-            std::cout << "return(" << args[1] << ") => " << scope->get(args[1]) << std::endl;
-          }
+
+          // LOG TO DEBUG STREAM
+          debug << "return(" << args[1] << ") => " << scope->get(args[1]) << std::endl;
+
           break;
         }
         else if (symbols.find(args[0]) < symbols.size()) cmd.math(args, scope, debug);
@@ -59,14 +60,13 @@ class Function {
           double val = funcs[args[0]].run(vars, funcs, debug);
           scope->set(args[1], val);
 
-          if(debug) {
-            std::cout << args[0] << "(";
-            if (args.size() >= 1) std::cout << args[1];
-            for (int i=2; i<args.size(); i++) {
-              std::cout << ", " << args[i];
-            }
-            std::cout << ") => " << scope->get(args[1]) << std::endl;
+          // LOG TO DEBUG STREAM
+          debug << args[0] << "(";
+          if (args.size() >= 1) debug << args[1];
+          for (int i=2; i<args.size(); i++) {
+            debug << ", " << args[i];
           }
+          debug << ") => " << scope->get(args[1]) << std::endl;
         }
       }
       return exit;
