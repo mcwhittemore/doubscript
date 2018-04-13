@@ -1,0 +1,13 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: mbgl/7d2403f42e:linux-gcc-6
+    steps:
+      - checkout
+      - run:
+          name: build
+          command: make all
+      - run:
+          name: tests
+          command: make test

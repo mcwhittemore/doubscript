@@ -1,2 +1,0 @@
-main:input // define a function that accepts one input
-  doubd=input*2 // multiply input by two and assign result to doubled

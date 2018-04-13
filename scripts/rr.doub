@@ -1,8 +1,0 @@
-main:n
-  out = rr(n)
-  print(out)
-
-rr: n
-  if (n <= 1) return(1)
-  sr = rr(n/2)
-  return((2 * sr) + n)
