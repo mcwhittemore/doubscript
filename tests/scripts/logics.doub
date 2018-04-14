@@ -1,0 +1,11 @@
+double:a
+  return(add(a,a))
+
+add:a,b
+  return(a+b)
+
+mult:a,b
+  return(a * b)
+  noop=1 // this should not be run
+
+

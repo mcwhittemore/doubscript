@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.3.1
+
+- Fix bug where `return(func(1,2))` would segfault
+- Adds test coverage for maths and calling functions
+
 ## 0.3.0
 
 ### Header API

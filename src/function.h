@@ -21,9 +21,12 @@ class Function {
     double run(std::vector<double> input, std::map<std::string, doub::Function> funcs, std::ostream &debug) {
       if (input.size() < args.size()) throw "not enough args";
       if (input.size() > args.size()) throw "too many args";
+      debug << "args:";
       for(int i=0; i<input.size(); i++) {
+        debug << " " << args[i] << "=" << input[i];
         dbls[args[i]] = input[i];
       }
+      debug << "\n";
 
       doub::Scope scope = doub::Scope(dbls);
 

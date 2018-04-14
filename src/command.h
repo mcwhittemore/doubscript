@@ -46,7 +46,7 @@ class Command {
     bool toActions(std::string c) {
 
       // ACTION: (...), return(...) and function(...)
-      c = resolveParendsAndFunctions(c);
+      c = resolveParensAndFunctions(c);
  
       // ACTION: ^
       std::vector<std::string> exp = {"^"};
@@ -71,9 +71,8 @@ class Command {
       return c.length() == 0;
     }
 
-    std::string resolveParendsAndFunctions(std::string c) {
-      std::vector<std::string> paren = {"("};
-      size_t pos = findSymbol(c, 0, paren);
+    std::string resolveParensAndFunctions(std::string c) {
+      size_t pos = c.rfind("(", -1);
       while(pos < c.size()) {
         std::string name = before(c, pos);
         std::string cmd = internal(c, pos);
@@ -102,7 +101,7 @@ class Command {
         if (pos == c.size()) throw "Unexpected end of command";
         c.replace(pos, content.length(), args[1]);
 
-        pos = findSymbol(c, 0, paren);
+        pos = c.rfind("(", -1);
       }
       return c;
     }
