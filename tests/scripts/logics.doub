@@ -1,6 +1,5 @@
 double:a
-  v=add(a,a)
-  return(v)
+  return(add(a,a))
 
 add:a,b
   return(a+b)

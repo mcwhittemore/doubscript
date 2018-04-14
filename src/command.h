@@ -72,8 +72,7 @@ class Command {
     }
 
     std::string resolveParensAndFunctions(std::string c) {
-      std::vector<std::string> paren = {"("};
-      size_t pos = findSymbol(c, 0, paren);
+      size_t pos = c.rfind("(", -1);
       while(pos < c.size()) {
         std::string name = before(c, pos);
         std::string cmd = internal(c, pos);
@@ -102,7 +101,7 @@ class Command {
         if (pos == c.size()) throw "Unexpected end of command";
         c.replace(pos, content.length(), args[1]);
 
-        pos = findSymbol(c, 0, paren);
+        pos = c.rfind("(", -1);
       }
       return c;
     }
