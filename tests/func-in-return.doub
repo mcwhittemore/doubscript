@@ -1,5 +1,0 @@
-main: input
-  return(2x(input))
-
-2x: input
-  return((input*2)+2*2)

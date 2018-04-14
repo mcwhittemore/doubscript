@@ -46,7 +46,7 @@ class Command {
     bool toActions(std::string c) {
 
       // ACTION: (...), return(...) and function(...)
-      c = resolveParendsAndFunctions(c);
+      c = resolveParensAndFunctions(c);
  
       // ACTION: ^
       std::vector<std::string> exp = {"^"};
@@ -71,7 +71,7 @@ class Command {
       return c.length() == 0;
     }
 
-    std::string resolveParendsAndFunctions(std::string c) {
+    std::string resolveParensAndFunctions(std::string c) {
       std::vector<std::string> paren = {"("};
       size_t pos = findSymbol(c, 0, paren);
       while(pos < c.size()) {
