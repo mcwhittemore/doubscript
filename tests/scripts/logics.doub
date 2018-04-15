@@ -5,7 +5,21 @@ add:a,b
   return(a+b)
 
 mult:a,b
-  return(a * b)
+  return(a*b)
   noop=1 // this should not be run
 
+less:a,b
+  return(a<b)
+
+great:a,b
+  return(a>b)
+
+lequal: a,b
+  return(a<=b)
+
+gequal: a,b
+  return(a>=b)
+
+equal:a,b
+  return(a==b)
 

@@ -26,6 +26,24 @@ class Command {
       return actions[i];
     }
 
+    void compare(std::vector<std::string> args, doub::Scope *scope, std::ostream &debug) {
+      std::string act = args.at(0);
+      double left = scope->get(args[1]);
+      double right = scope->get(args[2]);
+      std::string var = args[3];
+
+      double val = 0;
+      if (act == "<") val = left < right ? 1 : 0;
+      if (act == ">") val = left > right ? 1 : 0;
+      if (act == "<=") val = left <= right ? 1 : 0;
+      if (act == ">=") val = left >= right ? 1 : 0;
+      if (act == "==") val = left == right ? 1 : 0;
+
+      scope->set(var, val);
+
+      debug << var << " = " << left << act << right << " => " << scope->get(var) << std::endl;
+    }
+
     void math(std::vector<std::string> args, doub::Scope *scope, std::ostream &debug) {
       std::string act = args[0];
       double left = scope->get(args[1]);
@@ -60,6 +78,9 @@ class Command {
       std::vector<std::string> addAndSub = {"+", "-"};
       c = resolveSymbol(c, addAndSub);
 
+      // ACTION: <, <=, ==, >=, >
+      c = resolveComparisons(c);
+
       // ACTION: =
       c = resolveAssign(c);
 
@@ -69,6 +90,29 @@ class Command {
         if (varIndex <= numVar) return true;
       }
       return c.length() == 0;
+    }
+
+    std::string resolveComparisons(std::string c) {
+      std::vector<std::string> comparisons = {"<=", ">=", "==", "<", ">"};
+      for (int i=0; i<comparisons.size(); i++) {
+        std::string comparison = comparisons[i];
+        size_t pos = c.find(comparison);
+        while (pos < c.size()) {
+          std::string var = newVar();
+          std::string left = before(c, pos);
+          std::string right = after(c, pos+comparison.size()-1);
+          std::vector<std::string> args = {comparison, left, right, var};
+          actions.push_back(args);
+
+          // Clean up phrase
+          std::string phrase = left + comparison + right;
+          c.replace(c.find(phrase), phrase.length(), var);
+
+          pos = c.find(comparison);
+        }
+      }
+
+      return c;
     }
 
     std::string resolveParensAndFunctions(std::string c) {
@@ -187,11 +231,7 @@ class Command {
 
       std::string left = before(c, loc);
       std::string right = after(c, loc);
-      std::vector<std::string> args;
-      args.push_back(act);
-      args.push_back(left);
-      args.push_back(right);
-      args.push_back(var);
+      std::vector<std::string> args = {act, left, right, var};
       actions.push_back(args);
 
       // remove the added phrase and replace with a tmp var
@@ -203,7 +243,7 @@ class Command {
 
 
     size_t findSymbol(std::string text, size_t start) {
-      std::vector<std::string> symbols = {"=", "*", "/", "^", "+", "-",  "(", ")"};
+      std::vector<std::string> symbols = {"=", "*", "/", "^", "+", "-",  "(", ")", "<", ">"};
       return findSymbol(text, start, symbols);
     }
 

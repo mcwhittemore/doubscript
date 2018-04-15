@@ -53,22 +53,28 @@ class Function {
 
           break;
         }
-        else if (symbols.find(args[0]) < symbols.size()) cmd.math(args, scope, debug);
+        else if (args[0] == "<" || args[0] == ">" || args[0] == "<=" || args[0] == ">=" || args[0] == "==") {
+          cmd.compare(args, scope, debug);
+        }
+        else if (symbols.find(args[0]) < symbols.size()) {
+          cmd.math(args, scope, debug);
+        }
         else {
           std::vector<double> vars;
           for(int i=1; i<args.size(); i++) {
             double varVal = scope->get(args[i]);
             vars.push_back(varVal);
           }
-          double val = funcs[args[0]].run(vars, funcs, debug);
-          scope->set(args[1], val);
 
-          // LOG TO DEBUG STREAM
           debug << args[0] << "(";
           if (args.size() >= 1) debug << args[1];
           for (int i=2; i<args.size(); i++) {
             debug << ", " << args[i];
           }
+
+          double val = funcs[args[0]].run(vars, funcs, debug);
+          scope->set(args[1], val);
+
           debug << ") => " << scope->get(args[1]) << std::endl;
         }
       }

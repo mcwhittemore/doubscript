@@ -65,6 +65,7 @@ class Doubscript {
 
     double debug(std::string f, std::vector<double> args, std::ostream &ds) {
       doub::Function func = functions[f];
+      ds << "run " << f << " ";
       return func.run(args, functions, ds);
     }
 
