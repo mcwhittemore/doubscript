@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.4.0
+
+### Language Features
+
+- `<, <=, ==, >=, >` opperations will now result in 0 when its wrong and 1 when its right
+
 ## 0.3.1
 
 - Fix bug where `return(func(1,2))` would segfault
