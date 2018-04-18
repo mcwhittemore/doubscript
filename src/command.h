@@ -63,10 +63,7 @@ class Command {
   private:
     bool toActions(std::string c) {
 
-      // ACTION: if(...)
-
-
-      // ACTION: (...), return(...) and function(...)
+      // ACTION: (...), return(...), if(...) and function(...)
       c = resolveParensAndFunctions(c);
  
       // ACTION: ^
