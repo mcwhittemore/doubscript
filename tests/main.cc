@@ -40,6 +40,10 @@ int main(int argc, char **argv)
     failures += assert::equal(logics.run("equal", {2,2}), 1, "2 == 2 = 1");
     failures += assert::equal(logics.run("equal", {4,2}), 0, "4 == 2 = 0");
 
+    failures += assert::equal(logics.run("remains", {4,2}), 0, "if: 4 % 2 = 0");
+    failures += assert::equal(logics.run("remains", {5,2}), 1, "if: 5 % 2 = 1");
+    failures += assert::equal(logics.run("remains", {7,8}), 7, "if: 7 % 8 = 7");
+
   } catch(const char* c) {
     std::cout << "FAIL (" << c << ")" << std::endl;
     return failures + 1;

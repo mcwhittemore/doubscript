@@ -63,6 +63,9 @@ class Command {
   private:
     bool toActions(std::string c) {
 
+      // ACTION: if(...)
+
+
       // ACTION: (...), return(...) and function(...)
       c = resolveParensAndFunctions(c);
  
@@ -131,6 +134,12 @@ class Command {
           std::string tempLine = var + "=" + cmds[i];
           bool finished = toActions(tempLine);
           if (!finished) throw "Unexpected end of command";
+        }
+
+        if(name == "if") {
+          size_t bpos = c.find(")@@");
+          if (bpos == c.size()) throw "if statements must have sub-blocks";
+          args.push_back(after(c, bpos+2));
         }
 
         // This is because the `toActions` call
