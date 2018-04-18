@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.5.0
+
+- Fixes code indentation requirements bug to require two spaces for all lines in a function and two more spaces per block depth.
+- Drops `\t` indentation support.
+
+### Language Features
+
+- `if(...)` is now supported and will run the directly indented block of code below it if the final value resolved in `(...)` resolves to 1. The run block will share the scope of the function. 
+
 ## 0.4.0
 
 ### Language Features

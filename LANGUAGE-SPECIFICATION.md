@@ -10,10 +10,12 @@ Doubscript is a work in progress, for now it looks like this.
 - `return(...)` returns the value in the parens to the caller.
 - `function(x,y,z,...)` calls a custom function named `function` passing the args provided along.
 - `<, <=, ==, >=, >` results in 0 when false and 1 when true.
+- `if(...)` will run the indented lines of code directly after if the value resolved in `(...)` is 1.
+- `  ` (double space) now defines different block levels and is enforced via error messages.
 
 ### TODO
 
-- `if` for basic processing control
+- `&&` and `||`
 - Formalize syntax error messages
 - Provide standard math functions like sin, cos, log...
 - Throw error on undefined vars at compile time
