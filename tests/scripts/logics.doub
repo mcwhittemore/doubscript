@@ -23,3 +23,8 @@ gequal: a,b
 equal:a,b
   return(a==b)
 
+remains:a,b
+  if(a<b)
+    return(a)
+  return(remains(a-b, b))
+

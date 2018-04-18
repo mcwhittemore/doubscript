@@ -75,14 +75,14 @@ class Doubscript {
       // get func logic
       std::vector<std::string> logic;
       for(int i=1; i<lines.size(); i++) {
-        std::string line = stripComments(lines[i]);
+        std::string line = stripCommentAndWhitespace(lines[i], 2);
         if (line.length() > 0) logic.push_back(line);
       }
 
       if (logic.size() == 0) return;
 
       // get func name and args
-      std::string header = stripComments(lines[0]);
+      std::string header = stripCommentAndWhitespace(lines[0], 0);
       int len = header.length();
       std::vector<std::string> headerParts;
       std::string hold = "";
@@ -105,13 +105,30 @@ class Doubscript {
       functions[name] = doub::Function(headerParts, logic);
     }
 
-    std::string stripComments(std::string line) {
+    std::string stripCommentAndWhitespace(std::string line, int blockDepth) {
       // TODO: throw error when an @ is found
       std::string out = "";
       int len = line.length();
-      for (int i=0; i<len; i++) {
+      int i=0;
+
+      // Make sure the code is indented correctly
+      while(i<blockDepth) {
+        if (line[i] != ' ') throw "improper indentation";
+        i++;
+      }
+
+      // Make sure deeper block indents are kept
+      while(i<len) {
+        if (line[i] != ' ') break;
+        out.push_back(line[i]);
+        i++;
+      }
+
+      // Strip comments and extra whitespace
+      while(i<len) {
         if (line[i] == '/' && line[i+1] == '/') break;
         if (line[i] != ' ' && line[i] != '\t') out.push_back(line[i]);
+        i++;
       }
       return out;
     }

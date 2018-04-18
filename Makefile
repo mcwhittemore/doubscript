@@ -5,7 +5,7 @@ test: all
 	./build/test
 
 debug:
-	gdb ./build/test
+	lldb ./build/test
 
 clean:
 	rm -rf ./build/*

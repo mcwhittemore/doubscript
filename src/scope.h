@@ -6,6 +6,7 @@ namespace doub {
 class Scope {
   std::map<std::string, double> dbls;
   double returnVal;
+  bool returnValSet = false;
 
   public:
     Scope() {};
@@ -27,7 +28,12 @@ class Scope {
     }
 
     void setReturn(double val) {
+      returnValSet = true;
       returnVal = val;
+    }
+
+    bool hasReturn() {
+      return returnValSet;
     }
 
     double getReturn() {
