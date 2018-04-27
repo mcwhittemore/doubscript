@@ -23,6 +23,12 @@ gequal: a,b
 equal:a,b
   return(a==b)
 
+and:a,b
+  return(a && b)
+
+or: a,b
+  return(a || b)
+
 remains:a,b
   if(a<b)
     return(a)

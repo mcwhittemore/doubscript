@@ -81,6 +81,9 @@ class Function {
               break;
             }
           }
+          else if (scope->get(args[1]) != 0) {
+            throw "if statements must resolve to either 1 or 0";
+          }
         }
         else if (args[0] == "return") {
           exit = true;
@@ -91,7 +94,7 @@ class Function {
 
           break;
         }
-        else if (args[0] == "<" || args[0] == ">" || args[0] == "<=" || args[0] == ">=" || args[0] == "==") {
+        else if (args[0] == "<" || args[0] == ">" || args[0] == "<=" || args[0] == ">=" || args[0] == "==" || args[0] == "||" || args[0] == "&&") {
           cmd.compare(args, scope, debug);
         }
         else if (symbols.find(args[0]) < symbols.size()) {
