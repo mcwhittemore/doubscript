@@ -38,6 +38,12 @@ class Command {
       if (act == "<=") val = left <= right ? 1 : 0;
       if (act == ">=") val = left >= right ? 1 : 0;
       if (act == "==") val = left == right ? 1 : 0;
+      if (act == "&&" || act == "||") {
+        if (left != 0 && left != 1) throw "values to the left and right of " + act + " must be 1 or 0";
+        if (right != 0 && right != 1) throw "values to the left and right of " + act + " must be 1 or 0";
+        if (act == "&&" && left == 1 && right == 1) val = 1;
+        if (act == "||" && (left == 1 || right == 1)) val = 1;
+      }
 
       scope->set(var, val);
 
@@ -93,7 +99,7 @@ class Command {
     }
 
     std::string resolveComparisons(std::string c) {
-      std::vector<std::string> comparisons = {"<=", ">=", "==", "<", ">"};
+      std::vector<std::string> comparisons = {"<=", ">=", "==", "<", ">", "&&", "||"};
       for (int i=0; i<comparisons.size(); i++) {
         std::string comparison = comparisons[i];
         size_t pos = c.find(comparison);

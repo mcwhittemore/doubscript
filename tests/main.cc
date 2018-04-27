@@ -40,6 +40,16 @@ int main(int argc, char **argv)
     failures += assert::equal(logics.run("equal", {2,2}), 1, "2 == 2 = 1");
     failures += assert::equal(logics.run("equal", {4,2}), 0, "4 == 2 = 0");
 
+    failures += assert::equal(logics.run("and", {0,0}), 0, "0 && 0 = 0");
+    failures += assert::equal(logics.run("and", {1,0}), 0, "1 && 0 = 0");
+    failures += assert::equal(logics.run("and", {0,1}), 0, "0 && 1 = 0");
+    failures += assert::equal(logics.run("and", {1,1}), 1, "1 && 1 = 1");
+
+    failures += assert::equal(logics.run("or", {0,0}), 0, "0 || 0 = 0");
+    failures += assert::equal(logics.run("or", {1,0}), 1, "1 || 0 = 1");
+    failures += assert::equal(logics.run("or", {0,1}), 1, "0 || 1 = 1");
+    failures += assert::equal(logics.run("or", {1,1}), 1, "1 || 1 = 1");
+
     failures += assert::equal(logics.run("remains", {4,2}), 0, "if: 4 % 2 = 0");
     failures += assert::equal(logics.run("remains", {5,2}), 1, "if: 5 % 2 = 1");
     failures += assert::equal(logics.run("remains", {7,8}), 7, "if: 7 % 8 = 7");
