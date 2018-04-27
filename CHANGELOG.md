@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.6.0
+
+- Enforces `1` and `0` values in `if` with an error
+
+### Language Features
+
+- `&&` and `||` support. These comparitors only work with `1` and `0` and will throw an error if another double value is present.
+
 ## 0.5.0
 
 - Fixes code indentation requirements bug to require two spaces for all lines in a function and two more spaces per block depth.
