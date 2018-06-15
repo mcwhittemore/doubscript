@@ -20,7 +20,7 @@ class Doubscript {
         content.push_back(c);
       }
       fclose(pFile);
-      doub::Doubscript m = doub::Doubscript(content);
+      doub::Doubscript m(content);
       return m;
     }
   
